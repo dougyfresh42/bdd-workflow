@@ -1,6 +1,6 @@
 ---
 description: Commit, archive the proposal, and regenerate context
-model: anthropic/claude-haiku-4-5
+model: github-copilot/claude-haiku-4.5
 ---
 
 Load the `bdd-workflow` skill.

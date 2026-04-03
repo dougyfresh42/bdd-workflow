@@ -1,6 +1,6 @@
 ---
 description: Draft a proposal for a new change
-model: anthropic/claude-sonnet-4-5
+model: github-copilot/claude-sonnet-4.6
 ---
 
 Load the `bdd-workflow` skill, then load the `bdd-propose` skill.

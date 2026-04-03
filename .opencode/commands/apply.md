@@ -1,6 +1,6 @@
 ---
 description: Implement the latest proposal (or specify: /apply 2026-04-02-slug)
-model: anthropic/claude-sonnet-4-5
+model: github-copilot/claude-sonnet-4.6
 ---
 
 Load the `bdd-workflow` skill.

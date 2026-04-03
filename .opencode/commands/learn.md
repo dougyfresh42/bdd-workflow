@@ -1,6 +1,6 @@
 ---
 description: Capture a workflow learning or feedback. Usage: /learn [feedback text]
-model: anthropic/claude-sonnet-4-5
+model: github-copilot/claude-sonnet-4.6
 ---
 
 Load the `bdd-workflow` skill.

@@ -1,7 +1,7 @@
 ---
 description: Reviews applied changes against the proposal for completeness and consistency
 mode: subagent
-model: anthropic/claude-sonnet-4-5
+model: github-copilot/claude-sonnet-4.6
 temperature: 0.1
 permission:
   edit: deny

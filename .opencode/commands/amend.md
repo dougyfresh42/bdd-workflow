@@ -1,6 +1,6 @@
 ---
 description: Revise implementation based on review feedback
-model: anthropic/claude-sonnet-4-5
+model: github-copilot/claude-sonnet-4.6
 ---
 
 Load the `bdd-workflow` skill.
