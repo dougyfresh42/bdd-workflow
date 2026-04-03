@@ -44,3 +44,10 @@ Feature: Init Command
     Given the bdd-workflow package is built
     When I run "npx bdd-workflow init --help"
     Then help text for init is displayed
+
+  Scenario: Init does not emit compiled artifacts into user project
+    Given a clean temporary directory
+    When I run "npx bdd-workflow init" in that directory
+    Then no .js.map or .d.ts.map files exist in the project
+    And no .d.ts files exist in the project
+    And no compiled .js files exist alongside .ts source files
