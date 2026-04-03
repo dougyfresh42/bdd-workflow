@@ -1,0 +1,11 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-5",
+  "instructions": ["CONTEXT.md"],
+  "agent": {
+    "review": {
+      "model": "anthropic/claude-sonnet-4-5",
+      "temperature": 0.1
+    }
+  }
+}

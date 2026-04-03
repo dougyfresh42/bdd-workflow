@@ -1,0 +1,21 @@
+{
+  "name": "my-project",
+  "version": "0.1.0",
+  "description": "A BDD workflow project",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "npx cucumber-js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@cucumber/cucumber": "^11.0.0",
+    "@types/node": "^22.0.0",
+    "bdd-workflow": "^0.1.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  }
+}

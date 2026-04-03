@@ -1,0 +1,57 @@
+# Node
+node_modules/
+
+# Build outputs - do not commit dist (as requested)
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# TypeScript / source maps
+*.js.map
+*.d.ts.map
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Runtime / temp
+temp/
+tmp/
+*.tmp
+
+# Environment files
+.env
+.env.*.local
+.env.local
+
+# Test / coverage / reports
+coverage/
+.nyc_output/
+cucumber-report/
+test-results/
+junit-report.xml
+
+# Editor / IDE
+.vscode/
+.idea/
+*.code-workspace
+notes.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary / swap files
+*~
+*.swp
+*.lock
+*.pid
+
+# Packages / local caches
+*.tgz
+.cache/
+.pnp.*
