@@ -13,6 +13,8 @@ export class BddWorkflowWorld extends World {
   lastError?: string;
   lastExitCode?: number;
   defineConfig?: any;
+  /** The model value set by test setup, used to assert preservation after update. */
+  customModel?: string;
 
   constructor(options: any) {
     super(options);

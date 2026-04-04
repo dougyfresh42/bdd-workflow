@@ -1,5 +1,5 @@
 ---
-description: Capture a workflow learning or feedback. Usage: /learn [feedback text]
+description: "Capture a workflow learning or feedback. Usage: /learn [feedback text]"
 model: anthropic/claude-sonnet-4-5
 ---
 

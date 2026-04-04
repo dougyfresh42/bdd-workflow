@@ -7,10 +7,10 @@ import { Given, When, Then } from '@cucumber/cucumber';
 import { strict as assert } from 'assert';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { BddWorkflowWorld } from '../world.js';
+import { BddWorkflowWorld } from '../world.ts';
 
 // Extend world with test properties
-declare module '../world.js' {
+declare module '../world.ts' {
   interface BddWorkflowWorld {
     tempDir?: string;
     lastOutput?: string;

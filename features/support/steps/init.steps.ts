@@ -7,10 +7,10 @@ import { strict as assert } from 'assert';
 import { execSync, spawnSync } from 'child_process';
 import { existsSync, readFileSync, rmSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { BddWorkflowWorld } from '../world.js';
+import { BddWorkflowWorld } from '../world.ts';
 
 // Extend world with test properties
-declare module '../world.js' {
+declare module '../world.ts' {
   interface BddWorkflowWorld {
     tempDir?: string;
     lastOutput?: string;
@@ -66,7 +66,7 @@ When('I run "npx bdd-workflow init" in that directory', function (this: BddWorkf
   });
   this.lastOutput = result.stdout;
   this.lastError = result.stderr;
-  this.lastExitCode = result.status;
+  this.lastExitCode = result.status ?? undefined;
 });
 
 /**
@@ -82,7 +82,7 @@ When('running "npm install" in the project succeeds', function (this: BddWorkflo
   });
   this.lastOutput = result.stdout;
   this.lastError = result.stderr;
-  this.lastExitCode = result.status;
+  this.lastExitCode = result.status ?? undefined;
   assert.equal(result.status, 0, `npm install failed: ${result.stderr}`);
 });
 
@@ -96,7 +96,7 @@ When('running "npx tsc --noEmit" in the project succeeds', function (this: BddWo
     encoding: 'utf-8',
     stdio: ['pipe', 'pipe', 'pipe'],
   });
-  this.lastExitCode = result.status;
+  this.lastExitCode = result.status ?? undefined;
   assert.equal(result.status, 0, `tsc failed: ${result.stderr}`);
 });
 
@@ -125,7 +125,7 @@ When('I run "npx bdd-workflow --help"', function (this: BddWorkflowWorld) {
   });
   this.lastOutput = result.stdout;
   this.lastError = result.stderr;
-  this.lastExitCode = result.status;
+  this.lastExitCode = result.status ?? undefined;
 });
 
 /**
@@ -138,7 +138,7 @@ When('I run "npx bdd-workflow init --help"', function (this: BddWorkflowWorld) {
   });
   this.lastOutput = result.stdout;
   this.lastError = result.stderr;
-  this.lastExitCode = result.status;
+  this.lastExitCode = result.status ?? undefined;
 });
 
 /**
