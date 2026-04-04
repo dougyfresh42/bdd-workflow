@@ -303,3 +303,11 @@ If a command or skill file changes in a breaking way between package versions, u
 
 ### Roadmap placement
 This feature is not in any existing phase (1–6). It should be treated as a new **Phase 1.5** or as a patch to Phase 1 (`NPM Package Scaffold`), since it is a core CLI command that belongs alongside `init`. Alternatively it can be labeled as a standalone improvement. The ROADMAP.md should be updated to note it.
+
+---
+
+## Outcome
+
+- Archived: 2026-04-04
+- Verdict: APPROVE
+- Commit: f1af5b7
