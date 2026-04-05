@@ -4,9 +4,9 @@
 
 import { Given, When, Then, Before, After } from '@cucumber/cucumber';
 import { strict as assert } from 'assert';
-import { execSync, spawnSync } from 'child_process';
-import { existsSync, readFileSync, rmSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { spawnSync } from 'child_process';
+import { existsSync, readFileSync, rmSync, mkdirSync, writeFileSync, readdirSync, statSync } from 'fs';
+import { join, resolve, relative } from 'path';
 import { BddWorkflowWorld } from '../world.ts';
 
 // Extend world with test properties
@@ -17,6 +17,51 @@ declare module '../world.ts' {
     lastError?: string;
     lastExitCode?: number;
   }
+}
+
+/**
+ * Absolute path to the package root directory. All CLI invocations use
+ * `node <packageRoot>/dist/cli.js` so the tests do not require the package
+ * to be published to the npm registry.
+ */
+const packageRoot = resolve(new URL(import.meta.url).pathname, '../../../../');
+
+/**
+ * Run the local bdd-workflow CLI directly via `node dist/cli.js`.
+ * Mirrors the `runCli` helper in update.steps.ts.
+ */
+function runCli(args: string[], cwd: string): { stdout: string; stderr: string; exitCode: number } {
+  const result = spawnSync(
+    'node',
+    [join(packageRoot, 'dist', 'cli.js'), ...args],
+    {
+      cwd,
+      encoding: 'utf-8',
+      stdio: ['pipe', 'pipe', 'pipe'],
+    }
+  );
+  return {
+    stdout: result.stdout ?? '',
+    stderr: result.stderr ?? '',
+    exitCode: result.status ?? 1,
+  };
+}
+
+/**
+ * Recursively list all files under a directory, returning relative paths.
+ */
+function listFilesRecursive(dir: string, base: string = dir): string[] {
+  const result: string[] = [];
+  if (!existsSync(dir)) return result;
+  for (const entry of readdirSync(dir)) {
+    const full = join(dir, entry);
+    if (statSync(full).isDirectory()) {
+      result.push(...listFilesRecursive(full, base));
+    } else {
+      result.push(full.slice(base.length + 1));
+    }
+  }
+  return result;
 }
 
 /**
@@ -50,31 +95,28 @@ Given('a temporary directory with a package.json', function (this: BddWorkflowWo
     version: '1.0.0',
     type: 'module',
   };
-  const packagePath = join(this.tempDir, 'package.json');
-  execSync(`echo '${JSON.stringify(packageJson)}' > "${packagePath}"`, { cwd: this.tempDir });
+  writeFileSync(join(this.tempDir, 'package.json'), JSON.stringify(packageJson, null, 2));
 });
 
 /**
- * Run npx bdd-workflow init in temp directory.
+ * Run bdd-workflow init in temp directory using the local CLI binary.
  */
 When('I run "npx bdd-workflow init" in that directory', function (this: BddWorkflowWorld) {
   assert(this.tempDir, 'tempDir not set');
-  const result = spawnSync('npm', ['exec', 'bdd-workflow', 'init'], {
-    cwd: this.tempDir,
-    encoding: 'utf-8',
-    stdio: ['pipe', 'pipe', 'pipe'],
-  });
+  const result = runCli(['init', this.tempDir], packageRoot);
   this.lastOutput = result.stdout;
   this.lastError = result.stderr;
-  this.lastExitCode = result.status ?? undefined;
+  this.lastExitCode = result.exitCode;
 });
 
 /**
  * Run npm install.
+ * Installs the local bdd-workflow package by file path so the test does not
+ * require the package to be published to the npm registry.
  */
 When('running "npm install" in the project succeeds', function (this: BddWorkflowWorld) {
   assert(this.tempDir, 'tempDir not set');
-  const result = spawnSync('npm', ['install', '--omit=optional'], {
+  const result = spawnSync('npm', ['install', '--omit=optional', packageRoot], {
     cwd: this.tempDir,
     encoding: 'utf-8',
     stdio: ['pipe', 'pipe', 'pipe'],
@@ -116,29 +158,23 @@ When('running "npx cucumber-js" in the project runs with 0 scenarios', function 
 });
 
 /**
- * Run npx bdd-workflow --help.
+ * Run npx bdd-workflow --help using the local CLI binary.
  */
 When('I run "npx bdd-workflow --help"', function (this: BddWorkflowWorld) {
-  const result = spawnSync('npm', ['exec', 'bdd-workflow', '--help'], {
-    encoding: 'utf-8',
-    stdio: ['pipe', 'pipe', 'pipe'],
-  });
+  const result = runCli(['--help'], packageRoot);
   this.lastOutput = result.stdout;
   this.lastError = result.stderr;
-  this.lastExitCode = result.status ?? undefined;
+  this.lastExitCode = result.exitCode;
 });
 
 /**
- * Run npx bdd-workflow init --help.
+ * Run npx bdd-workflow init --help using the local CLI binary.
  */
 When('I run "npx bdd-workflow init --help"', function (this: BddWorkflowWorld) {
-  const result = spawnSync('npm', ['exec', 'bdd-workflow', 'init', '--help'], {
-    encoding: 'utf-8',
-    stdio: ['pipe', 'pipe', 'pipe'],
-  });
+  const result = runCli(['init', '--help'], packageRoot);
   this.lastOutput = result.stdout;
   this.lastError = result.stderr;
-  this.lastExitCode = result.status ?? undefined;
+  this.lastExitCode = result.exitCode;
 });
 
 /**
@@ -232,7 +268,7 @@ Then('new bdd-workflow files are added', function (this: BddWorkflowWorld) {
  */
 Given('the bdd-workflow package is built', function (this: BddWorkflowWorld) {
   const result = spawnSync('npm', ['run', 'build'], {
-    cwd: process.cwd(),
+    cwd: packageRoot,
     encoding: 'utf-8',
     stdio: ['pipe', 'pipe', 'pipe'],
   });
@@ -240,12 +276,12 @@ Given('the bdd-workflow package is built', function (this: BddWorkflowWorld) {
 });
 
 /**
- * Import defineConfig from bdd-workflow.
+ * Import defineConfig from bdd-workflow using dynamic import (ESM-safe).
  */
-When('I import defineConfig from bdd-workflow', function (this: BddWorkflowWorld) {
+When('I import defineConfig from bdd-workflow', async function (this: BddWorkflowWorld) {
   try {
-    const { defineConfig } = require('../dist/index.js');
-    this.defineConfig = defineConfig;
+    const mod = await import(join(packageRoot, 'dist', 'index.js'));
+    this.defineConfig = mod.defineConfig;
   } catch (err) {
     throw new Error(`Failed to import defineConfig: ${err}`);
   }
@@ -267,19 +303,66 @@ Then('it returns a valid configuration with defaults', function (this: BddWorkfl
  * Check that help text is displayed.
  */
 Then('help text is displayed', function (this: BddWorkflowWorld) {
-  assert(this.lastOutput?.includes('Usage:') || this.lastOutput?.includes('bdd-workflow'), 'Help text not displayed');
+  const output = (this.lastOutput ?? '') + (this.lastError ?? '');
+  assert(output.includes('Usage:') || output.includes('bdd-workflow'), 'Help text not displayed');
 });
 
 /**
  * Check that init subcommand is listed.
  */
 Then('init subcommand is listed', function (this: BddWorkflowWorld) {
-  assert(this.lastOutput?.includes('init'), 'init command not listed in help');
+  const output = (this.lastOutput ?? '') + (this.lastError ?? '');
+  assert(output.includes('init'), 'init command not listed in help');
 });
 
 /**
  * Check that help text for init is displayed.
  */
 Then('help text for init is displayed', function (this: BddWorkflowWorld) {
-  assert(this.lastOutput?.includes('init') || this.lastOutput?.includes('Initialize'), 'init help not displayed');
+  const output = (this.lastOutput ?? '') + (this.lastError ?? '');
+  assert(output.includes('init') || output.includes('Initialize'), 'init help not displayed');
+});
+
+/**
+ * Check that no .js.map or .d.ts.map files exist in the scaffolded project.
+ * The scaffolded project should contain only source-level artifacts, not
+ * compiled TypeScript output from the bdd-workflow package itself.
+ */
+Then('no .js.map or .d.ts.map files exist in the project', function (this: BddWorkflowWorld) {
+  assert(this.tempDir, 'tempDir not set');
+  const allFiles = listFilesRecursive(this.tempDir);
+  const mapFiles = allFiles.filter(f => f.endsWith('.js.map') || f.endsWith('.d.ts.map'));
+  assert.equal(
+    mapFiles.length, 0,
+    `Found unexpected map files in scaffolded project:\n${mapFiles.join('\n')}`
+  );
+});
+
+/**
+ * Check that no .d.ts declaration files exist in the scaffolded project.
+ */
+Then('no .d.ts files exist in the project', function (this: BddWorkflowWorld) {
+  assert(this.tempDir, 'tempDir not set');
+  const allFiles = listFilesRecursive(this.tempDir);
+  const dtsFiles = allFiles.filter(f => f.endsWith('.d.ts'));
+  assert.equal(
+    dtsFiles.length, 0,
+    `Found unexpected .d.ts files in scaffolded project:\n${dtsFiles.join('\n')}`
+  );
+});
+
+/**
+ * Check that no compiled .js files exist alongside their .ts source counterparts.
+ * A .js file is considered "compiled alongside" a .ts file if both share the
+ * same path with only the extension differing (e.g. src/foo.ts and src/foo.js).
+ */
+Then('no compiled .js files exist alongside .ts source files', function (this: BddWorkflowWorld) {
+  assert(this.tempDir, 'tempDir not set');
+  const allFiles = listFilesRecursive(this.tempDir);
+  const tsFiles = new Set(allFiles.filter(f => f.endsWith('.ts')).map(f => f.slice(0, -3)));
+  const compiledJs = allFiles.filter(f => f.endsWith('.js') && tsFiles.has(f.slice(0, -3)));
+  assert.equal(
+    compiledJs.length, 0,
+    `Found compiled .js files alongside .ts sources in scaffolded project:\n${compiledJs.join('\n')}`
+  );
 });

@@ -4,7 +4,8 @@ mode: subagent
 model: anthropic/claude-sonnet-4-5
 temperature: 0.1
 permission:
-  edit: deny
+  edit:
+    ".opencode/proposals/*-review.md": allow
   bash:
     "*": deny
     "git diff*": allow

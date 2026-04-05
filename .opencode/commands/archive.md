@@ -1,11 +1,15 @@
 ---
-description: Commit, archive the proposal, and regenerate context
+description: 'Commit, archive the proposal, and regenerate context'
 model: github-copilot/claude-haiku-4.5
 ---
 
 Load the `bdd-workflow` skill.
 
-Archive the completed change:
+**Guard:** If `$ARGUMENTS` does not contain `--approved`, print the following message and stop — do not proceed further:
+
+> Archive requires explicit human approval. Re-run with --approved or confirm via the bdd-workflow agent.
+
+If `--approved` is present, proceed:
 
 1. Determine the commit message from the proposal summary (conventional commit format: `feat:`, `fix:`, `refactor:`, etc.)
    Proposal: !`ls -t .opencode/proposals/*.md 2>/dev/null | head -1`
@@ -21,6 +25,7 @@ Archive the completed change:
    - Verdict: APPROVE
    - Commit: [commit hash]
    ```
+   Also move the paired `*-review.md` file (if one exists alongside the proposal) to `.opencode/proposals/completed/`.
 
 5. Print a summary of what was done.
 

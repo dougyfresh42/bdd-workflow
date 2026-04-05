@@ -30,12 +30,12 @@ No change is complete unless all three layers are present and consistent.
 ## When to Use Each Step
 
 - **explore**: Only if CONTEXT.md doesn't give you enough to write a proposal
-- **propose**: Always — never implement without a proposal
+- **propose**: Always — never implement without a proposal. The bdd-workflow agent pauses after propose and waits for explicit human approval before running apply.
 - **apply**: Only after a proposal exists and has been reviewed by the user
-- **review**: Always after apply — never skip
+- **review**: Always after apply — never skip. Review always writes a `*-review.md` file alongside the proposal in `.opencode/proposals/`.
 - **amend**: When review verdict is AMEND
 - **learn**: When implementation diverged from proposal, or the workflow caused friction
-- **archive**: When review verdict is APPROVE
+- **archive**: When review verdict is APPROVE. Archive requires `--approved` flag or explicit confirmation via the bdd-workflow agent — it will not proceed without it.
 
 ## Model Guidance
 

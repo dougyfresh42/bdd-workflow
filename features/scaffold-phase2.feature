@@ -85,7 +85,8 @@ Feature: Phase 2 OpenCode Skills and Commands
   Scenario: Review agent has permission restrictions
     Given a clean temporary directory
     When I run "npx bdd-workflow init" in that directory
-    Then the file ".opencode/agents/review.md" contains text "edit: deny"
+    Then the file ".opencode/agents/review.md" contains text "permission:"
+    And the file ".opencode/agents/review.md" contains text "*-review.md"
     And the file ".opencode/agents/review.md" contains text "git diff"
     And the file ".opencode/agents/review.md" contains text "npx cucumber-js"
     And the file ".opencode/agents/review.md" contains text "npx tsc --noEmit"
