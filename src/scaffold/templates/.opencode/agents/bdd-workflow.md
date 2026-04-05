@@ -1,6 +1,6 @@
 ---
 description: Orchestrates the full BDD workflow — propose, apply, review, amend, archive
-mode: subagent
+mode: primary
 model: github-copilot/claude-sonnet-4.6
 temperature: 0.3
 ---
