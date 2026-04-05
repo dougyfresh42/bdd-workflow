@@ -97,3 +97,14 @@ Feature: Phase 2 OpenCode Skills and Commands
     Then the file "opencode.json" contains valid JSON
     And the file "opencode.json" contains "agent"
     And the file "opencode.json" contains "review"
+
+  Scenario: bdd-workflow skill references npx bdd-workflow check for the pre-review gate
+    Given a clean temporary directory
+    When I run "npx bdd-workflow init" in that directory
+    Then the file ".opencode/skills/bdd-workflow/SKILL.md" contains text "npx bdd-workflow check"
+
+  Scenario: bdd-workflow skill enforces explicit archive approval gate
+    Given a clean temporary directory
+    When I run "npx bdd-workflow init" in that directory
+    Then the file ".opencode/skills/bdd-workflow/SKILL.md" contains text "STOP after printing"
+    And the file ".opencode/agents/bdd-workflow.md" contains text "STOP immediately"

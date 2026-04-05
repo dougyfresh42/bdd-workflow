@@ -3,8 +3,9 @@
   ".opencode/commands/propose.md": "ec312a797fdce10770f467a704afe01f96833156ce0d8775746e7c335847f7ab",
   ".opencode/commands/learn.md": "90c319f6d1e4e214f5999a5e34bc91c15806fe193121f10974fbdbf5757c6700",
   ".opencode/commands/archive.md": "a6d5aa464c51921a8bf28c77e11a025383a0ecdff3c0b1caeae7cccd7f2d7f07",
-  ".opencode/commands/apply.md": "973091cceaa068a5fdfc379d05f7a845ce90d4bc2f3a6ea282d30d8c52a23ae8",
-  ".opencode/commands/amend.md": "baff976ec601e65c77f1147afb83d47e6357a073e3a068569decaac57029536b",
-  ".opencode/agents/bdd-workflow.md": "e12f07fe20cfe4193e29165ac7d68257f79a9eb9d53e21825436ee01e24735f2",
-  ".opencode/commands/bdd-workflow.md": "c1d0bcca8fe2d55e61404ae637929804655dfab4d648684a61fba52ad5f2f118"
+  ".opencode/commands/apply.md": "16862f0ce348e8e04e7cec3236e887b435b909bd415cd34494cc177822998bae",
+  ".opencode/commands/amend.md": "d85cebb14ab561b790c9505e4d10e88b181919a506d9196876b62019666296ce",
+  ".opencode/agents/bdd-workflow.md": "f53c219443a9288d22a4408c14e4378a58cd309bbb8bc499b75a13fb3ea99a8b",
+  ".opencode/commands/bdd-workflow.md": "c1d0bcca8fe2d55e61404ae637929804655dfab4d648684a61fba52ad5f2f118",
+  ".opencode/skills/bdd-workflow/SKILL.md": "2450e2fcd014cada8237bfe60c908cca05901cca74ff77c13b9bc9c2679c4e92"
 }

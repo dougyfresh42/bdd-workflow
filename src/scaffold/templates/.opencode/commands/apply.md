@@ -16,6 +16,8 @@ Read the proposal completely. Then implement it:
 2. Add all JSDoc comments from the Doc Updates section exactly as specified
 3. Create or modify all `.feature` files from the BDD Specs section
 4. Create step definitions for any new Gherkin steps
-5. Ensure `npx tsc --noEmit` passes before finishing
+5. Run `npx bdd-workflow check`. If it fails, fix the failures now — do not hand off
+   to review with a failing check. Failures at this stage are still part of apply, not
+   amend.
 
 Do not make design decisions not covered in the proposal. If you encounter an ambiguity, note it in a comment and choose the most conservative interpretation.

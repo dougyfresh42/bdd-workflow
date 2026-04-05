@@ -31,11 +31,11 @@ No change is complete unless all three layers are present and consistent.
 
 - **explore**: Only if CONTEXT.md doesn't give you enough to write a proposal
 - **propose**: Always — never implement without a proposal. The bdd-workflow agent pauses after propose and waits for explicit human approval before running apply.
-- **apply**: Only after a proposal exists and has been reviewed by the user
+- **apply**: Only after a proposal exists and has been reviewed by the user. Before handing off to review, **run `npx bdd-workflow check` and confirm it passes.** Do not proceed to review if it fails — fix the failures first (that is still part of apply, not amend).
 - **review**: Always after apply — never skip. Review always writes a `*-review.md` file alongside the proposal in `.opencode/proposals/`.
-- **amend**: When review verdict is AMEND
+- **amend**: When review verdict is AMEND. After making fixes, **run `npx bdd-workflow check` and confirm it passes before re-running review.** A failing check after amend means the amend is not complete — do not hand off to review until green.
 - **learn**: When implementation diverged from proposal, or the workflow caused friction
-- **archive**: When review verdict is APPROVE. Archive requires `--approved` flag or explicit confirmation via the bdd-workflow agent — it will not proceed without it.
+- **archive**: When review verdict is APPROVE. **STOP after printing the APPROVE verdict and the review file path. Do NOT proceed to archive.** Wait for the user to explicitly say to archive (e.g. "archive", "yes, archive it", "go ahead"). Only then run `/archive --approved`. An APPROVE verdict is permission, not a request.
 
 ## Model Guidance
 

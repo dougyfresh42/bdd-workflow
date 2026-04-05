@@ -7,6 +7,7 @@ import { Command } from 'commander';
 import { initCommand } from './commands/init.js';
 import { updateCommand } from './commands/update.js';
 import { contextCommand } from './commands/context.js';
+import { checkCommand } from './commands/check.js';
 
 const program = new Command();
 
@@ -20,5 +21,7 @@ program.addCommand(initCommand());
 program.addCommand(updateCommand());
 // Register the context subcommand (regenerates CONTEXT.md).
 program.addCommand(contextCommand());
+// Register the check subcommand (pre-review type-check and test gate).
+program.addCommand(checkCommand());
 
 program.parse(process.argv);

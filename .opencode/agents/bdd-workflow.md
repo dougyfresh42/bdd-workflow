@@ -22,12 +22,15 @@ archive without explicit user confirmation.
 1. If given a new goal, load the `bdd-workflow` skill and run `/propose <goal>`.
    Then STOP — print the proposal path and ask the user to review and approve before continuing.
 
-2. When the user approves, run `/apply`. After apply, always run `/review`.
+2. When the user approves, run `/apply`. After apply, run `npx bdd-workflow check`.
+   Only run `/review` once the check passes.
 
 3. If the review verdict is AMEND, run `/amend` then re-run `/review`. Repeat until APPROVE or REJECT.
 
-4. After an APPROVE verdict, STOP — print the review file path and ask the user for explicit
-   confirmation before archiving. Do not pass --approved without the user saying so.
+4. After an APPROVE verdict, **STOP immediately** — print the review file path and
+   explicitly ask the user: "The review is APPROVE. Shall I archive?" Do not run
+   `/archive` until the user responds affirmatively. An APPROVE verdict is permission,
+   not an instruction.
 
 5. When the user confirms, run `/archive --approved`.
 
