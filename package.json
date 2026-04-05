@@ -17,15 +17,17 @@
     "test": "npx cucumber-js"
   },
   "dependencies": {
+    "@cucumber/gherkin": "^29.0.0",
+    "@cucumber/messages": "^26.0.0",
     "commander": "^12.0.0",
     "glob": "^11.0.0",
-    "gray-matter": "^4.0.3"
+    "gray-matter": "^4.0.3",
+    "typescript": "^5.0.0"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^11.0.0",
     "@types/node": "^22.0.0",
     "ts-node": "^10.9.2",
-    "tsx": "^4.21.0",
-    "typescript": "^5.0.0"
+    "tsx": "^4.21.0"
   }
 }
