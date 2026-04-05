@@ -125,3 +125,8 @@ None.
 ## Verdict
 
 **APPROVE** — All checklist items pass. The implementation is complete, well-documented, fully tested, and type-safe. The TypeDoc version deviation from the proposal (`^0.27.0` → `^0.28.0`) was a necessary and correctly handled compatibility fix, not a regression. The change is ready to archive.
+
+## Outcome
+- Archived: 2026-04-05
+- Verdict: APPROVE
+- Commit: eaa1547

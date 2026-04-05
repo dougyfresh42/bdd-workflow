@@ -391,3 +391,8 @@ Feature: bdd-workflow specs command
 - **Step definition stubs**: The new feature scenarios will require new step definition files (or extensions of existing ones) in `features/support/steps/`. The apply agent must create these alongside the feature files.
 
 - **Breaking change surface**: No breaking changes to existing public API. The `parseFeatureFiles` function signature is unchanged. New exports are purely additive.
+
+## Outcome
+- Archived: 2026-04-05
+- Verdict: APPROVE
+- Commit: eaa1547
