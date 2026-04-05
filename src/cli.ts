@@ -8,6 +8,8 @@ import { initCommand } from './commands/init.js';
 import { updateCommand } from './commands/update.js';
 import { contextCommand } from './commands/context.js';
 import { checkCommand } from './commands/check.js';
+import { docsCommand } from './commands/docs.js';
+import { specsCommand } from './commands/specs.js';
 
 const program = new Command();
 
@@ -23,5 +25,9 @@ program.addCommand(updateCommand());
 program.addCommand(contextCommand());
 // Register the check subcommand (pre-review type-check and test gate).
 program.addCommand(checkCommand());
+// Register the docs subcommand (generates API documentation via TypeDoc).
+program.addCommand(docsCommand());
+// Register the specs subcommand (generates SPECS.md from Gherkin feature files).
+program.addCommand(specsCommand());
 
 program.parse(process.argv);

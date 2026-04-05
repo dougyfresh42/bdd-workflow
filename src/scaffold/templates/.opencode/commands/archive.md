@@ -27,6 +27,10 @@ If `--approved` is present, proceed:
    ```
    Also move the paired `*-review.md` file (if one exists alongside the proposal) to `.opencode/proposals/completed/`.
 
-5. Print a summary of what was done.
+5. Regenerate project artifacts:
+   - Run `npx bdd-workflow context` to update `CONTEXT.md`
+   - Run `npx bdd-workflow specs` to update `SPECS.md`
+
+6. Print a summary of what was done.
 
 Additional message (if any): $ARGUMENTS
