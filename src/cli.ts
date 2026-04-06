@@ -10,6 +10,7 @@ import { contextCommand } from './commands/context.js';
 import { checkCommand } from './commands/check.js';
 import { docsCommand } from './commands/docs.js';
 import { specsCommand } from './commands/specs.js';
+import { learnCommand } from './commands/learn.js';
 
 const program = new Command();
 
@@ -29,5 +30,7 @@ program.addCommand(checkCommand());
 program.addCommand(docsCommand());
 // Register the specs subcommand (generates SPECS.md from Gherkin feature files).
 program.addCommand(specsCommand());
+// Register the learn subcommand (list and promote learning entries).
+program.addCommand(learnCommand());
 
 program.parse(process.argv);

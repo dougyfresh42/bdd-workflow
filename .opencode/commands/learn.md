@@ -8,14 +8,23 @@ Load the `bdd-workflow` skill.
 Capture a learning from the current or most recent workflow cycle.
 
 Context:
-- Original proposal: !`ls -t .opencode/proposals/*.md 2>/dev/null | head -1`
-- User feedback (if any): $ARGUMENTS
+- Proposals directory: !`ls -t .opencode/proposals/*.md 2>/dev/null | head -3`
+- Existing learnings: !`ls .opencode/learnings/*.md 2>/dev/null | wc -l` existing entries
 
-Analyze:
+User feedback (if provided): $ARGUMENTS
+
+Analyze the workflow cycle:
 1. How did the final implementation differ from the proposal?
-2. Did the workflow cause friction? Where?
-3. What specific change to the `bdd-workflow` framework (skills, templates, workflow steps) would prevent this friction?
+2. Did the review require multiple amendment rounds? If so, why?
+3. What was unclear, missing, or wrong in the framework that caused friction?
+4. What specific change to which skill, command, or template would prevent this?
 
-Write a learning entry to `.opencode/learnings/YYYY-MM-DD-slug.md` using today's date: !`date +%Y-%m-%d`
+Create a learning entry at `.opencode/learnings/YYYY-MM-DD-slug.md` where today's date is: !`date +%Y-%m-%d`
 
-Use the template at `.opencode/templates/learning.md`.
+Use the template at `.opencode/templates/learning.md`. The entry must include all required sections:
+- What Happened
+- Root Cause
+- Proposed Framework Change (with Target File and Proposed Change subsections)
+- Impact
+
+After saving, print the file path and the one-sentence summary of the proposed change.

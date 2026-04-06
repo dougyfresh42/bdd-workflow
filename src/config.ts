@@ -38,6 +38,11 @@ export interface WorkflowConfig {
   autoContextAfterArchive: boolean;
   proposalDir: string;
   learningsDir: string;
+  /**
+   * GitHub repository (owner/name) for `bdd-workflow learn promote`.
+   * Defaults to `'douglasdollars/bdd-workflow'`. Users can override in bdd-workflow.config.ts.
+   */
+  repository: string;
 }
 
 export interface BddWorkflowConfig {
@@ -88,6 +93,7 @@ const defaults: BddWorkflowConfig = {
     autoContextAfterArchive: true,
     proposalDir: '.opencode/proposals',
     learningsDir: '.opencode/learnings',
+    repository: 'douglasdollars/bdd-workflow',
   },
 };
 

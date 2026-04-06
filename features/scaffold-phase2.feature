@@ -108,3 +108,10 @@ Feature: Phase 2 OpenCode Skills and Commands
     When I run "npx bdd-workflow init" in that directory
     Then the file ".opencode/skills/bdd-workflow/SKILL.md" contains text "STOP after printing"
     And the file ".opencode/agents/bdd-workflow.md" contains text "STOP immediately"
+
+  Scenario: learn command prompts for all required learning entry sections
+    Given a clean temporary directory
+    When I run "npx bdd-workflow init" in that directory
+    Then the file ".opencode/commands/learn.md" contains text "What Happened"
+    And the file ".opencode/commands/learn.md" contains text "Root Cause"
+    And the file ".opencode/commands/learn.md" contains text "Proposed Framework Change"
