@@ -4,11 +4,12 @@
  * to configure the framework for your project.
  */
 
-export { defineConfig } from './config.js';
+export { defineConfig, validateConfig, assertValidConfig } from './config.js';
 export type {
   BddWorkflowConfig,
   BddConfig,
   DocsConfig,
   ContextConfig,
   WorkflowConfig,
+  ConfigError,
 } from './config.js';

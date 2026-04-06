@@ -34,8 +34,7 @@ export async function promoteLearnings(
       execSync('gh --version', { stdio: 'pipe', encoding: 'utf-8' });
     } catch {
       console.error(
-        '[bdd-workflow] Error: The "gh" CLI is required for "learn promote" but was not found in PATH.\n' +
-          'Install gh from https://cli.github.com/ and authenticate with "gh auth login".'
+        'GitHub CLI not found. Install from https://cli.github.com and authenticate with "gh auth login".'
       );
       process.exit(1);
     }

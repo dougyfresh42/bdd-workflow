@@ -74,7 +74,7 @@ export async function parseLearningFile(filePath: string): Promise<LearningEntry
   return {
     filePath,
     slug,
-    date: String(data['date'] ?? ''),
+    date: formatDate(data['date']),
     proposal: String(data['proposal'] ?? ''),
     status: (data['status'] as LearningEntry['status']) ?? 'new',
     promoted: Boolean(data['promoted'] ?? false),
@@ -85,6 +85,23 @@ export async function parseLearningFile(filePath: string): Promise<LearningEntry
     rootCause: extractSection(body, 'Root Cause'),
     proposedChange: extractSection(body, 'Proposed Framework Change'),
   };
+}
+
+/**
+ * Format a date value from YAML frontmatter as an ISO date string (YYYY-MM-DD).
+ * gray-matter parses unquoted YAML dates as JavaScript Date objects; this
+ * function handles both Date objects and string values gracefully.
+ *
+ * @param value - The raw date value from gray-matter parsed data
+ * @returns ISO date string in YYYY-MM-DD format, or empty string if not parseable
+ */
+function formatDate(value: unknown): string {
+  if (!value) return '';
+  if (value instanceof Date) {
+    // Format as YYYY-MM-DD in UTC to avoid timezone-shift issues
+    return value.toISOString().split('T')[0];
+  }
+  return String(value);
 }
 
 /**

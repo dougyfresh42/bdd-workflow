@@ -414,3 +414,10 @@ After editing `src/scaffold/templates/.opencode/commands/learn.md`, the implemen
 must run `npm run build && npx bdd-workflow update` per AGENTS.md to propagate the
 template change to the live `.opencode/commands/learn.md`. This will be a user-visible
 diff in git.
+
+---
+
+## Outcome
+- Archived: 2026-04-06
+- Verdict: APPROVE
+- Commit: 977f16c3cf4d8c699ea489a5c0680dab65cfe192

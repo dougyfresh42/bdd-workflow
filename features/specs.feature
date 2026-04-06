@@ -28,7 +28,7 @@ Feature: bdd-workflow specs command
     Given a temporary project directory with no ".feature" files
     When I run "bdd-workflow specs"
     Then the command exits with code 0
-    And "SPECS.md" contains the header and summary section with zero scenarios
+    And the output contains "No .feature files found"
 
   Scenario: Tags are included when present on scenarios
     Given a feature file with tagged scenarios

@@ -1,5 +1,8 @@
 /**
- * Configuration types, defineConfig function, and loadConfig loader.
+ * Configuration types, defineConfig function, loadConfig loader, and
+ * validateConfig validator. validateConfig is called by all CLI commands
+ * after loading to surface misconfiguration with actionable messages.
+ * Does NOT read config from disk — that is loadConfig's responsibility.
  */
 
 import { resolve, join } from 'node:path';
@@ -176,5 +179,80 @@ process.stdout.write(JSON.stringify(config));
   } catch {
     console.warn('[bdd-workflow] Failed to parse config JSON. Using defaults.');
     return defineConfig({});
+  }
+}
+
+/**
+ * Represents a single configuration validation error.
+ * @property field - Dot-path of the offending config field (e.g. 'bdd.featuresDir')
+ * @property message - Human-readable description of the problem and how to fix it
+ */
+export interface ConfigError {
+  field: string;
+  message: string;
+}
+
+/**
+ * Validate a fully-resolved BddWorkflowConfig and return all errors found.
+ *
+ * Checks language, bdd.featuresDir, bdd.runCommand, docs.style, and
+ * docs.format. Does NOT validate filesystem paths — only value constraints.
+ *
+ * @param config - The resolved configuration to validate
+ * @returns Array of ConfigError objects (empty if valid)
+ */
+export function validateConfig(config: BddWorkflowConfig): ConfigError[] {
+  const errors: ConfigError[] = [];
+
+  if (!['typescript', 'javascript'].includes(config.language)) {
+    errors.push({
+      field: 'language',
+      message: `Unsupported language: "${config.language}". Supported: typescript, javascript`,
+    });
+  }
+
+  if (!config.bdd.featuresDir) {
+    errors.push({ field: 'bdd.featuresDir', message: 'featuresDir is required' });
+  }
+
+  if (!config.bdd.runCommand) {
+    errors.push({ field: 'bdd.runCommand', message: 'runCommand is required' });
+  }
+
+  if (!['jsdoc', 'tsdoc'].includes(config.docs.style)) {
+    errors.push({
+      field: 'docs.style',
+      message: `Unsupported doc style: "${config.docs.style}". Use jsdoc or tsdoc`,
+    });
+  }
+
+  if (!['markdown', 'html'].includes(config.docs.format)) {
+    errors.push({
+      field: 'docs.format',
+      message: `Unsupported format: "${config.docs.format}". Use 'markdown' or 'html'`,
+    });
+  }
+
+  return errors;
+}
+
+/**
+ * Assert that a fully-resolved BddWorkflowConfig is valid, exiting the process
+ * with a human-readable error summary if any validation errors are found.
+ *
+ * Intended to be called by every CLI command immediately after loadConfig.
+ * Prints all errors to stderr before exiting so the user can fix them all in
+ * one pass rather than discovering them one at a time.
+ *
+ * @param config - The resolved configuration to validate
+ */
+export function assertValidConfig(config: BddWorkflowConfig): void {
+  const errors = validateConfig(config);
+  if (errors.length > 0) {
+    console.error('bdd-workflow configuration errors:');
+    for (const err of errors) {
+      console.error(`  ${err.field}: ${err.message}`);
+    }
+    process.exit(1);
   }
 }

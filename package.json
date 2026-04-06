@@ -14,7 +14,9 @@
   "scripts": {
     "build": "tsc && node scripts/copy-templates.js",
     "dev": "tsc --watch",
-    "test": "npx cucumber-js"
+    "test": "npx cucumber-js",
+    "check": "npx tsc --noEmit",
+    "check:all": "npx tsc --noEmit && npx cucumber-js"
   },
   "dependencies": {
     "@cucumber/gherkin": "^29.0.0",

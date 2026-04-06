@@ -1,15 +1,17 @@
 /**
  * @module commands/learn
- * @description CLI command wiring for `bdd-workflow learn`. Provides two subcommands:
- * `list` (prints a formatted table of all learning entries) and `promote` (creates
- * GitHub issues from unpromoted learnings via the `gh` CLI). Does NOT contain
- * parsing or promotion logic — that lives in src/learn/index.ts and src/learn/promote.ts.
+ * @description CLI command wiring for `bdd-workflow learn`. Provides two
+ * subcommands: `list` (prints a formatted table of all learning entries) and
+ * `promote` (creates GitHub issues from unpromoted learnings via the `gh`
+ * CLI). Handles missing `gh` CLI with a clear installation message and exit 1.
+ * Does NOT contain parsing or promotion logic — that lives in
+ * src/learn/index.ts and src/learn/promote.ts.
  */
 
 import { Command } from 'commander';
 import { promoteLearnings } from '../learn/promote.js';
 import { listLearnings } from '../learn/index.js';
-import { loadConfig } from '../config.js';
+import { loadConfig, assertValidConfig } from '../config.js';
 
 /**
  * Build the `bdd-workflow learn` Commander command tree.
@@ -29,6 +31,7 @@ export function learnCommand(): Command {
     .option('--config <path>', 'Path to bdd-workflow.config.ts')
     .action(async (opts: { config?: string }) => {
       const config = await loadConfig(opts.config);
+      assertValidConfig(config);
       const learnings = await listLearnings(config);
 
       if (learnings.length === 0) {
@@ -51,6 +54,7 @@ export function learnCommand(): Command {
     .option('--dry-run', 'Show what would be promoted without creating issues')
     .action(async (opts: { config?: string; dryRun?: boolean }) => {
       const config = await loadConfig(opts.config);
+      assertValidConfig(config);
       await promoteLearnings(config, { dryRun: opts.dryRun ?? false });
     });
 
