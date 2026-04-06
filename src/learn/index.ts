@@ -74,7 +74,7 @@ export async function parseLearningFile(filePath: string): Promise<LearningEntry
   return {
     filePath,
     slug,
-    date: String(data['date'] ?? ''),
+    date: formatDate(data['date']),
     proposal: String(data['proposal'] ?? ''),
     status: (data['status'] as LearningEntry['status']) ?? 'new',
     promoted: Boolean(data['promoted'] ?? false),
@@ -85,6 +85,23 @@ export async function parseLearningFile(filePath: string): Promise<LearningEntry
     rootCause: extractSection(body, 'Root Cause'),
     proposedChange: extractSection(body, 'Proposed Framework Change'),
   };
+}
+
+/**
+ * Normalize a YAML date value to an ISO `YYYY-MM-DD` string.
+ *
+ * gray-matter (via js-yaml) parses bare dates like `date: 2026-03-15` as JavaScript
+ * Date objects. This helper converts them back to a plain ISO date string so callers
+ * always receive a consistent `string` type regardless of how the YAML was authored.
+ *
+ * @param value - The raw value from the parsed frontmatter `data` object.
+ * @returns A `YYYY-MM-DD` string, or an empty string if the value is absent.
+ */
+function formatDate(value: unknown): string {
+  if (value instanceof Date) {
+    return value.toISOString().slice(0, 10);
+  }
+  return String(value ?? '');
 }
 
 /**
