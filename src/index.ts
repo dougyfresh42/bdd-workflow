@@ -1,6 +1,6 @@
 /**
  * @module bdd-workflow
- * @description Public API for the bdd-workflow framework. Import defineConfig
+ * Public API for the bdd-workflow framework. Import defineConfig
  * to configure the framework for your project.
  */
 
