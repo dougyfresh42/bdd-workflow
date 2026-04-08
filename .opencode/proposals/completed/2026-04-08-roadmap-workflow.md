@@ -857,3 +857,9 @@ via `npx bdd-workflow update` or manually.
 |------|-------------|
 | `src/scaffold/index.ts` | Confirm `FRAMEWORK_LAYER_GLOBS` will pick up new agent/command files |
 | `src/scaffold/templates/.opencode/opencode.json` | Confirm `roadmap` / `roadmap-runner` do not need registration |
+
+## Outcome
+
+- Archived: 2026-04-08
+- Verdict: APPROVE
+- Commit: 6071e47

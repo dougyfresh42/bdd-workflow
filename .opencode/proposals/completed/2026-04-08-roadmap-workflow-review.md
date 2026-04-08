@@ -252,3 +252,9 @@ match the proposal exactly. The manifest is updated. TypeScript type check passe
 unproposed modification to `check.ts` is a necessary correctness fix directly enabling this
 feature's test infrastructure. The single dead-code import (`dirname` in `worktree.ts`) does not
 affect correctness and can be cleaned up opportunistically.
+
+## Outcome
+
+- Archived: 2026-04-08
+- Verdict: APPROVE
+- Commit: 6071e47
