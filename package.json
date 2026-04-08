@@ -14,9 +14,9 @@
   "scripts": {
     "build": "tsc && node scripts/copy-templates.js",
     "dev": "tsc --watch",
-    "test": "npx cucumber-js",
+    "test": "NODE_OPTIONS='--import tsx/esm' npx cucumber-js",
     "check": "npx tsc --noEmit",
-    "check:all": "npx tsc --noEmit && npx cucumber-js"
+    "check:all": "npx tsc --noEmit && NODE_OPTIONS='--import tsx/esm' npx cucumber-js"
   },
   "dependencies": {
     "@cucumber/gherkin": "^29.0.0",
@@ -24,12 +24,14 @@
     "commander": "^12.0.0",
     "glob": "^11.0.0",
     "gray-matter": "^4.0.3",
+    "js-yaml": "^4.1.1",
     "typedoc": "^0.28.0",
     "typedoc-plugin-markdown": "^4.11.0",
     "typescript": "^5.0.0"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^11.0.0",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.0.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0"

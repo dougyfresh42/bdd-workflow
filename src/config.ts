@@ -46,6 +46,11 @@ export interface WorkflowConfig {
    * Defaults to `'douglasdollars/bdd-workflow'`. Users can override in bdd-workflow.config.ts.
    */
   repository: string;
+  /**
+   * @property roadmapFile - Path (relative to project root) of the roadmap YAML
+   *   file. Defaults to `.opencode/roadmap.yaml`.
+   */
+  roadmapFile: string;
 }
 
 export interface BddWorkflowConfig {
@@ -97,6 +102,7 @@ const defaults: BddWorkflowConfig = {
     proposalDir: '.opencode/proposals',
     learningsDir: '.opencode/learnings',
     repository: 'douglasdollars/bdd-workflow',
+    roadmapFile: '.opencode/roadmap.yaml',
   },
 };
 

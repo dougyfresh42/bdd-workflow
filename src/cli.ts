@@ -11,6 +11,7 @@ import { checkCommand } from './commands/check.js';
 import { docsCommand } from './commands/docs.js';
 import { specsCommand } from './commands/specs.js';
 import { learnCommand } from './commands/learn.js';
+import { roadmapCommand } from './commands/roadmap.js';
 
 const program = new Command();
 
@@ -32,5 +33,7 @@ program.addCommand(docsCommand());
 program.addCommand(specsCommand());
 // Register the learn subcommand (list and promote learning entries).
 program.addCommand(learnCommand());
+// Register the roadmap subcommand (show, status, link, validate, worktree).
+program.addCommand(roadmapCommand());
 
 program.parse(process.argv);

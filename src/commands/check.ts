@@ -19,9 +19,12 @@ import { loadConfig, assertValidConfig } from '../config.js';
 /**
  * Create the `check` subcommand for Commander.
  *
- * Runs `npx tsc --noEmit` followed by `npx cucumber-js` in the current working
- * directory. Exits with the failing command's exit code on failure, or 0 on
- * success.
+ * Runs `npx tsc --noEmit` followed by the configured `bdd.runCommand`
+ * (defaults to `npx cucumber-js`) in the current working directory. Using
+ * the configured run command allows projects to pass environment variables
+ * (e.g. `NODE_OPTIONS=--import tsx/esm npx cucumber-js`) without patching
+ * the framework. Exits with the failing command's exit code on failure, or
+ * 0 on success.
  *
  * @returns Commander `Command` instance for the `check` subcommand.
  */
@@ -55,11 +58,16 @@ export function checkCommand(): Command {
       }
 
       // Step 2: cucumber tests
-      console.log('bdd-workflow check: running npx cucumber-js...');
-      const cucumber = spawnSync('npx', ['cucumber-js'], {
+      // Use the configured run command (defaults to 'npx cucumber-js').
+      // Split on whitespace to support commands like 'NODE_OPTIONS=... npx cucumber-js'.
+      const runCmd = config.bdd.runCommand;
+      console.log(`bdd-workflow check: running ${runCmd}...`);
+      const [cucumberBin, ...cucumberArgs] = runCmd.split(/\s+/);
+      const cucumber = spawnSync(cucumberBin, cucumberArgs, {
         cwd: process.cwd(),
         stdio: 'inherit',
-        shell: false,
+        shell: true,
+        env: { ...process.env },
       });
 
       if (cucumber.status !== 0) {

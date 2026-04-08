@@ -7,5 +7,8 @@
   ".opencode/commands/amend.md": "d85cebb14ab561b790c9505e4d10e88b181919a506d9196876b62019666296ce",
   ".opencode/agents/bdd-workflow.md": "f53c219443a9288d22a4408c14e4378a58cd309bbb8bc499b75a13fb3ea99a8b",
   ".opencode/commands/bdd-workflow.md": "c1d0bcca8fe2d55e61404ae637929804655dfab4d648684a61fba52ad5f2f118",
-  ".opencode/skills/bdd-workflow/SKILL.md": "2450e2fcd014cada8237bfe60c908cca05901cca74ff77c13b9bc9c2679c4e92"
+  ".opencode/skills/bdd-workflow/SKILL.md": "2450e2fcd014cada8237bfe60c908cca05901cca74ff77c13b9bc9c2679c4e92",
+  ".opencode/agents/roadmap.md": "a1bcd0ba183e13ffa4939675e2aca36f4d77ddbf3979c32741432261656d6897",
+  ".opencode/agents/roadmap-runner.md": "0859987eb82ea9be37211da0cf7d658a151b900b8193668d21e46805c50cd1e0",
+  ".opencode/commands/roadmap.md": "0ad8edfbda7e70bf4a53b1adc73bd98f8a22b5243d4aa08c564a453f7ede2d94"
 }
