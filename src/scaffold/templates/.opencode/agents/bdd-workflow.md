@@ -38,11 +38,11 @@ Load `bdd-workflow-roadmap` for roadmap YAML creation and maintenance.
    - Otherwise: ask the user to verify the criteria manually, then reply to proceed.
    - **Do NOT archive until the user confirms.**
 
-5. When the user confirms, run `/archive --approved`.
+5. When the user confirms, run `/archive
 
 ## Parallel roadmap cycle
 
-When the user asks to run roadmap steps, use the two-phase model from `bdd-workflow-cycle`:
+When the user asks to run roadmap steps, **use subagents** for parallel work in their own worktrees:
 
 **Phase 1 (on main):** Identify ready steps → propose each → link proposals → present list →
 **STOP and wait for user approval.**
@@ -51,6 +51,9 @@ When the user asks to run roadmap steps, use the two-phase model from `bdd-workf
 - `npx bdd-workflow roadmap worktree <step-id>` → creates `worktrees/<step-id>/`
 - Update step status to `in-progress`
 - In worktree: apply → check → review → amend? (repeat until APPROVE)
+    - For each ready step, launch a **separate subagent** (via the Task tool) that will work in its own worktree
+    - Subagents work **only** in `worktrees/<step-id>/` —never in the main tree from a subagent session
+    - The parent agent coordinates: collect results, present merge summary, check for newly ready steps
 - After APPROVE: run Acceptance Criteria Gate, STOP, wait for user confirmation
 - After confirmation: rebase, squash-merge to main, update status to `done`, remove worktree
 

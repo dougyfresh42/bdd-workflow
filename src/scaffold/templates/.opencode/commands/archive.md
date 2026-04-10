@@ -5,11 +5,9 @@ model: anthropic/claude-haiku-4-5
 
 Load the `bdd-workflow` skill.
 
-**Guard:** If `$ARGUMENTS` does not contain `--approved`, print the following message and stop — do not proceed further:
+**Guard:** If this skill was not explicitly run and approved by a human stop and print the following message.
 
-> Archive requires explicit human approval. Re-run with --approved or confirm via the bdd-workflow agent.
-
-If `--approved` is present, proceed:
+> Archive requires explicit human approval. Confirm via the bdd-workflow agent.
 
 1. Determine the commit message from the proposal summary (conventional commit format: `feat:`, `fix:`, `refactor:`, etc.)
    Proposal: !`ls -t .opencode/proposals/*.md 2>/dev/null | head -1`
