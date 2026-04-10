@@ -438,9 +438,9 @@ Then(
 
 Then('the output contains the worktree path', function (this: BddWorkflowWorld) {
   assert(this.tempDir, 'tempDir not set');
-  const expectedPath = join(this.tempDir, '.worktrees');
+  const expectedPath = join(this.tempDir, 'worktrees');
   assert(
-    this.lastOutput?.includes('.worktrees') || this.lastOutput?.includes(expectedPath),
+    this.lastOutput?.includes('worktrees') || this.lastOutput?.includes(expectedPath),
     `Expected output to contain worktree path.\nActual output:\n${this.lastOutput}`
   );
 });

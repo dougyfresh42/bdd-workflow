@@ -62,6 +62,29 @@ Then('the file {string} exists', function (this: BddWorkflowWorld, filePath: str
 });
 
 /**
+ * Check that a specific file does not exist.
+ */
+Then('the file {string} does not exist', function (this: BddWorkflowWorld, filePath: string) {
+  assert(this.tempDir, 'tempDir not set');
+  const fullPath = join(this.tempDir, filePath);
+  assert(
+    !existsSync(fullPath),
+    `File should not exist but does: ${fullPath}`
+  );
+});
+
+/**
+ * Check that a specific file is not empty.
+ */
+Then('the file {string} is not empty', function (this: BddWorkflowWorld, filePath: string) {
+  assert(this.tempDir, 'tempDir not set');
+  const fullPath = join(this.tempDir, filePath);
+  assert(existsSync(fullPath), `File does not exist: ${fullPath}`);
+  const content = readFileSync(fullPath, 'utf-8');
+  assert(content.trim().length > 0, `File is empty: ${fullPath}`);
+});
+
+/**
  * Check that a template file contains YAML frontmatter.
  */
 Then('the template file {string} contains frontmatter', function (this: BddWorkflowWorld, filePath: string) {

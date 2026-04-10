@@ -36,7 +36,24 @@ Example:
  */
 ```
 
-### 3. BDD Specs (the WHAT layer)
+### 3. Acceptance Criteria
+One or more concrete, human-verifiable statements describing the user-facing end goal.
+Each criterion must be something a person can check by running or interacting with the
+result — not a restatement of implementation details.
+
+Examples:
+- "Run `npm start`; visiting `http://localhost:3000` serves an HTML page."
+- "Running `npx my-cli --help` prints usage text and exits 0."
+- "Calling `processOrder({ id: 1 })` returns `{ status: 'ok' }` given a seeded DB."
+
+If the change has no user-facing artifact (e.g. a pure refactor or internal tooling
+fix), write: "No user-facing artifact — acceptance is automated test passage." The
+agent will surface this during review and ask the author to confirm it is intentional.
+
+**If this section is empty**, the agent will warn you and ask you to confirm that is
+intentional before proceeding to archive.
+
+### 4. BDD Specs (the WHAT layer)
 List every `.feature` file to create or modify. Include the full Gherkin content.
 
 Rules for good Gherkin:
@@ -48,13 +65,13 @@ Rules for good Gherkin:
 
 A scenario should be implementable by reading it with no other context.
 
-### 4. Implementation Plan (the HOW layer)
+### 5. Implementation Plan (the HOW layer)
 - List files to create and files to modify
 - Describe the approach without writing the code
 - Note any design decisions and why they were made
 - Note any alternatives considered and why rejected
 
-### 5. Risks and Considerations
+### 6. Risks and Considerations
 - Breaking changes (API, behavior, database)
 - Dependencies on other proposals or external systems
 - Edge cases that need explicit handling

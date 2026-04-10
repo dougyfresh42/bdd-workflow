@@ -10,6 +10,14 @@ status: draft
 
 [One paragraph: what is being changed and why. Include the user-visible impact.]
 
+## Acceptance Criteria
+
+<!-- One or more concrete, human-verifiable statements. Examples:
+  - Run `npm start`; visiting http://localhost:3000 serves an HTML page.
+  - `npx my-cli --help` prints usage and exits 0.
+  - No user-facing artifact — acceptance is automated test passage.
+-->
+
 ## Doc Updates (WHY)
 
 [List every JSDoc comment to add or modify. Include exact text.]

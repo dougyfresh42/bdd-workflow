@@ -5,11 +5,18 @@
  * `.opencode/.bdd-workflow-manifest.json` to perform a three-way diff for
  * each framework-layer file, applies frontmatter merges for agent/command
  * files where only user-owned keys differ, and returns a structured summary.
+ *
+ * Prune pass: after processing all current template files, iterates manifest
+ * entries that have no corresponding template file (files the framework
+ * previously wrote but has since removed). Unmodified stale files are deleted
+ * from disk and removed from the manifest. User-modified stale files are
+ * reported as modifiedByUser and left alone unless --force is passed.
+ *
  * Does NOT perform git operations — those remain the user's responsibility.
  * Does NOT modify files outside the framework layer.
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { globSync } from 'glob';
 import { FRAMEWORK_LAYER_GLOBS } from './index.js';
@@ -42,6 +49,9 @@ export interface UpdateResult {
   /** Files that appear to have been customized by the user (body or framework
    *  frontmatter changed) and were skipped. */
   modifiedByUser: string[];
+  /** Files deleted from disk because the template no longer includes them
+   *  and the on-disk content was unmodified (or --force was passed). */
+  pruned: string[];
 }
 
 /**
@@ -67,6 +77,13 @@ export interface UpdateResult {
  * - No manifest entry (project predates manifest feature) → same as
  *   MODIFIED_BY_USER: conservatively skip unless `--force`.
  *
+ * Prune pass: after the per-file loop, iterates manifest keys with no
+ * corresponding template file:
+ * - File absent from disk → remove manifest entry silently.
+ * - Disk hash matches manifest hash (unmodified) or --force → PRUNED: delete
+ *   from disk, remove manifest entry.
+ * - Disk hash differs (user modified) → MODIFIED_BY_USER: skip.
+ *
  * After processing all files, writes the updated manifest.
  *
  * @param targetDir - Absolute path to the project root to update.
@@ -80,6 +97,7 @@ export function updateScaffold(targetDir: string, opts: UpdateOptions = {}): Upd
     updated: [],
     merged: [],
     modifiedByUser: [],
+    pruned: [],
   };
 
   // Resolve the templates directory relative to this module
@@ -102,6 +120,9 @@ export function updateScaffold(targetDir: string, opts: UpdateOptions = {}): Upd
       }
     }
   }
+
+  // Build a set for O(1) lookup in the prune pass
+  const frameworkFileSet = new Set(frameworkFiles);
 
   for (const relPath of frameworkFiles) {
     const templatePath = join(templatesDir, relPath);
@@ -202,6 +223,44 @@ export function updateScaffold(targetDir: string, opts: UpdateOptions = {}): Upd
     }
   }
 
+  // ── Prune pass ────────────────────────────────────────────────────────────
+  // Iterate manifest keys that have no corresponding template file.
+  // These are files the framework previously wrote but has since removed.
+  for (const relPath of Object.keys(manifest)) {
+    if (frameworkFileSet.has(relPath)) {
+      continue; // handled in the main loop above
+    }
+
+    const diskPath = join(targetDir, relPath);
+
+    if (!existsSync(diskPath)) {
+      // Already gone from disk — clean up the manifest entry silently
+      delete manifest[relPath];
+      continue;
+    }
+
+    const diskContent = readFileSync(diskPath, 'utf-8');
+    const diskHash = hashContent(diskContent);
+    const manifestHash = manifest[relPath];
+    const unmodified = manifestHash !== undefined && diskHash === manifestHash;
+
+    if (unmodified || opts.force) {
+      // Safe to delete: either unmodified or --force was requested
+      unlinkSync(diskPath);
+      delete manifest[relPath];
+      result.pruned.push(relPath);
+      if (opts.verbose) {
+        console.log(`  [pruned]   ${relPath}`);
+      }
+    } else {
+      // User modified the file — leave it alone, report as modified
+      result.modifiedByUser.push(relPath);
+      if (opts.verbose) {
+        console.log(`  [skipped]  ${relPath} (modified by user, stale)`);
+      }
+    }
+  }
+
   writeManifest(targetDir, manifest);
 
   return result;
@@ -211,7 +270,7 @@ export function updateScaffold(targetDir: string, opts: UpdateOptions = {}): Upd
  * Print a human-readable summary of an `UpdateResult` to stdout.
  *
  * Emits a single summary line of the form:
- * `N updated  N merged  N added  N identical  N modified by user (skipped)`
+ * `N updated  N merged  N added  N identical  N pruned  N modified by user (skipped)`
  * whose substrings satisfy the spec-layer output assertions. If any files were
  * modified by the user, a follow-up list names each one with a --force hint.
  *
@@ -223,15 +282,24 @@ export function printUpdateSummary(result: UpdateResult): void {
   console.log('\nbdd-workflow update complete\n');
 
   // Emit a single summary line whose substrings match the spec assertions:
-  //   "N updated", "N merged", "N added", "N identical", "N modified by user (skipped)"
+  //   "N updated", "N merged", "N added", "N identical", "N pruned",
+  //   "N modified by user (skipped)"
   const parts: string[] = [
     `${result.updated.length} updated`,
     `${result.merged.length} merged`,
     `${result.added.length} added`,
     `${result.identical.length} identical`,
+    `${result.pruned.length} pruned`,
     `${totalModified} modified by user (skipped)`,
   ];
   console.log(`  ${parts.join('  ')}`);
+
+  if (result.pruned.length > 0) {
+    console.log('\n  Pruned (removed, no longer in framework):');
+    for (const f of result.pruned) {
+      console.log(`    ${f}`);
+    }
+  }
 
   if (totalModified > 0) {
     console.log('\n  Modified by user (use --force to overwrite):');

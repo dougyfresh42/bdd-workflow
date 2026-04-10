@@ -28,6 +28,7 @@ export interface RoadmapStep {
   proposal?: string;    // filename of linked proposal (basename only, no path)
   worktree?: string;    // git worktree branch name when in-progress
   notes?: string;       // free-form notes; not machine-read
+  acceptance_criteria?: string[]; // optional human-verifiable criteria mirroring the proposal section
 }
 
 export interface Roadmap {

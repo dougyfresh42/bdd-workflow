@@ -16,6 +16,8 @@ export class BddWorkflowWorld extends World {
   validateConfig?: any;
   /** The model value set by test setup, used to assert preservation after update. */
   customModel?: string;
+  /** The stale file path set by prune test setup, used in And/Then steps. */
+  staleFilePath?: string;
 
   constructor(options: any) {
     super(options);

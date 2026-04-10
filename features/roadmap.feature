@@ -69,13 +69,13 @@ Feature: Roadmap workflow
     Then the command exits with status 1
     And the output contains "unknown dependency"
 
-  Scenario: roadmap worktree creates a worktree and copies the proposal
+  Scenario: roadmap worktree creates a worktree at worktrees/<step-id>
     Given a roadmap file with a step "setup" linked to proposal "2026-04-08-setup.md"
     And a proposal file ".opencode/proposals/2026-04-08-setup.md" exists
     When I run "npx bdd-workflow roadmap worktree setup"
     Then the command exits with status 0
-    And the directory ".worktrees/setup" exists
-    And the file ".worktrees/setup/.opencode/proposals/2026-04-08-setup.md" exists
+    And the directory "worktrees/setup" exists
+    And the file "worktrees/setup/.opencode/proposals/2026-04-08-setup.md" exists
     And the output contains the worktree path
 
   Scenario: roadmap worktree fails when step has no linked proposal

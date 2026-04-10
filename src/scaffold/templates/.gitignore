@@ -4,4 +4,4 @@ docs/
 *.js.map
 *.d.ts.map
 .DS_Store
-.worktrees/
+worktrees/

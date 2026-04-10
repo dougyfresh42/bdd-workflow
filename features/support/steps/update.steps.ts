@@ -428,3 +428,94 @@ Then(
     );
   }
 );
+
+/**
+ * Write a stale (now-removed) framework file to disk, record its original hash
+ * in the manifest, and do NOT modify the content. Simulates a file the package
+ * previously wrote that no longer exists in the current template set, and the
+ * user has not modified it.
+ */
+Given(
+  'the file {string} was written by the framework and is unmodified',
+  function (this: BddWorkflowWorld, filePath: string) {
+    assert(this.tempDir, 'tempDir not set');
+    const diskPath = join(this.tempDir, filePath);
+    mkdirSync(dirname(diskPath), { recursive: true });
+    const content = '# Old Agent\nThis file was written by the framework.\n';
+    writeFileSync(diskPath, content, 'utf-8');
+    // Record hash in manifest — simulates package wrote this
+    const manifest = readManifest(this.tempDir);
+    manifest[filePath] = hashContent(content);
+    writeManifest(this.tempDir, manifest);
+    // Store for use in And/Then steps
+    this.staleFilePath = filePath;
+  }
+);
+
+/**
+ * Write a stale (now-removed) framework file to disk, record the ORIGINAL hash
+ * in the manifest, then modify the on-disk content. Simulates a file the package
+ * previously wrote, but the user has since modified.
+ */
+Given(
+  'the file {string} was written by the framework but modified by the user',
+  function (this: BddWorkflowWorld, filePath: string) {
+    assert(this.tempDir, 'tempDir not set');
+    const diskPath = join(this.tempDir, filePath);
+    mkdirSync(dirname(diskPath), { recursive: true });
+    const originalContent = '# Old Agent\nThis file was written by the framework.\n';
+    // Record the ORIGINAL hash in manifest (before user modification)
+    const manifest = readManifest(this.tempDir);
+    manifest[filePath] = hashContent(originalContent);
+    writeManifest(this.tempDir, manifest);
+    // Write modified content to disk — simulates user customization
+    const modifiedContent = originalContent + '\n# User addition\nCustomized by user.\n';
+    writeFileSync(diskPath, modifiedContent, 'utf-8');
+    this.staleFilePath = filePath;
+  }
+);
+
+/**
+ * No-op step: the stale file's non-existence in the template set is ensured by
+ * the fact that we never wrote it to the templates dir. The update command
+ * identifies stale files as manifest entries not in the current template set.
+ */
+Given(
+  'that file no longer exists in the current template set',
+  function (this: BddWorkflowWorld) {
+    // The file was written directly to disk and recorded in the manifest,
+    // but it does NOT exist in src/scaffold/templates/. The update command
+    // will identify it as a stale manifest entry during the prune pass.
+    // Nothing to do here.
+  }
+);
+
+/**
+ * Assert that a file no longer exists on disk after pruning.
+ */
+Then(
+  'the file {string} no longer exists on disk',
+  function (this: BddWorkflowWorld, filePath: string) {
+    assert(this.tempDir, 'tempDir not set');
+    const diskPath = join(this.tempDir, filePath);
+    assert(
+      !existsSync(diskPath),
+      `Expected file to have been deleted but it still exists: ${diskPath}`
+    );
+  }
+);
+
+/**
+ * Assert that a file still exists on disk (was not pruned).
+ */
+Then(
+  'the file {string} still exists on disk',
+  function (this: BddWorkflowWorld, filePath: string) {
+    assert(this.tempDir, 'tempDir not set');
+    const diskPath = join(this.tempDir, filePath);
+    assert(
+      existsSync(diskPath),
+      `Expected file to still exist on disk but it was deleted: ${diskPath}`
+    );
+  }
+);

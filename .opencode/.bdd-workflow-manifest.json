@@ -5,10 +5,12 @@
   ".opencode/commands/archive.md": "8738b8163089148f6efa4eb20023b78b48cae53bebf5fb3d0b03585f3e0c8989",
   ".opencode/commands/apply.md": "16862f0ce348e8e04e7cec3236e887b435b909bd415cd34494cc177822998bae",
   ".opencode/commands/amend.md": "d85cebb14ab561b790c9505e4d10e88b181919a506d9196876b62019666296ce",
-  ".opencode/agents/bdd-workflow.md": "f53c219443a9288d22a4408c14e4378a58cd309bbb8bc499b75a13fb3ea99a8b",
+  ".opencode/agents/bdd-workflow.md": "343ae2e76b740a660151780eb51f086a1087ee5859e0a5b56b26b45276d23324",
   ".opencode/commands/bdd-workflow.md": "c1d0bcca8fe2d55e61404ae637929804655dfab4d648684a61fba52ad5f2f118",
-  ".opencode/skills/bdd-workflow/SKILL.md": "2450e2fcd014cada8237bfe60c908cca05901cca74ff77c13b9bc9c2679c4e92",
-  ".opencode/agents/roadmap.md": "a1bcd0ba183e13ffa4939675e2aca36f4d77ddbf3979c32741432261656d6897",
-  ".opencode/agents/roadmap-runner.md": "0859987eb82ea9be37211da0cf7d658a151b900b8193668d21e46805c50cd1e0",
-  ".opencode/commands/roadmap.md": "0ad8edfbda7e70bf4a53b1adc73bd98f8a22b5243d4aa08c564a453f7ede2d94"
+  ".opencode/skills/bdd-workflow/SKILL.md": "31bf9ad7ac7068257ea062fdacbe7bf5736a7c8edde09a4bfb68a18ddfca7eeb",
+  ".opencode/commands/roadmap.md": "0ad8edfbda7e70bf4a53b1adc73bd98f8a22b5243d4aa08c564a453f7ede2d94",
+  ".opencode/skills/bdd-workflow-roadmap/SKILL.md": "8dfcd19addc78cef268a02134054480ff43fe5e10f53f13635a0541e787ec5a0",
+  ".opencode/skills/bdd-workflow-cycle/SKILL.md": "52f6f7c1b4a4b3ca2b5465c65627afffa2ddc9a6abaa7aba9a424d086a51c408",
+  ".opencode/skills/bdd-propose/SKILL.md": "0c73b110466fe218be2cbd6ac7f957bd88761cfbe935b7ebab799b6f8769d033",
+  ".opencode/templates/proposal.md": "9548ae723aad78d518a4f2ceb01d685ac8052679fead12c8aa3b38bb72a10bc0"
 }

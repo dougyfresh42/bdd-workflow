@@ -3,7 +3,7 @@ Feature: Phase 2 OpenCode Skills and Commands
   I want the scaffolded project to include all Phase 2 OpenCode skills, commands, and agents
   So that I can use the BDD workflow (propose, apply, review, amend, learn, archive)
 
-  Scenario: All 3 skill files exist in scaffolded project
+  Scenario: Core skill files exist in scaffolded project
     Given a clean temporary directory
     When I run "npx bdd-workflow init" in that directory
     Then the following skill files exist:
@@ -67,7 +67,7 @@ Feature: Phase 2 OpenCode Skills and Commands
   Scenario: Skills contain expected content
     Given a clean temporary directory
     When I run "npx bdd-workflow init" in that directory
-    Then the file ".opencode/skills/bdd-workflow/SKILL.md" contains text "Three-Layer Model"
+    Then the file ".opencode/skills/bdd-workflow/SKILL.md" is not empty
     And the file ".opencode/skills/bdd-propose/SKILL.md" contains text "Required Sections"
     And the file ".opencode/skills/bdd-review/SKILL.md" contains text "Review Checklist"
 
@@ -115,3 +115,26 @@ Feature: Phase 2 OpenCode Skills and Commands
     Then the file ".opencode/commands/learn.md" contains text "What Happened"
     And the file ".opencode/commands/learn.md" contains text "Root Cause"
     And the file ".opencode/commands/learn.md" contains text "Proposed Framework Change"
+
+  Scenario: Only two agent files exist in scaffolded project
+    Given a clean temporary directory
+    When I run "npx bdd-workflow init" in that directory
+    Then the file ".opencode/agents/bdd-workflow.md" exists
+    And the file ".opencode/agents/review.md" exists
+    And the file ".opencode/agents/roadmap.md" does not exist
+    And the file ".opencode/agents/roadmap-runner.md" does not exist
+
+  Scenario: bdd-workflow-cycle skill exists in scaffolded project
+    Given a clean temporary directory
+    When I run "npx bdd-workflow init" in that directory
+    Then the file ".opencode/skills/bdd-workflow-cycle/SKILL.md" exists
+
+  Scenario: bdd-workflow-roadmap skill exists in scaffolded project
+    Given a clean temporary directory
+    When I run "npx bdd-workflow init" in that directory
+    Then the file ".opencode/skills/bdd-workflow-roadmap/SKILL.md" exists
+
+  Scenario: proposal template contains Acceptance Criteria section
+    Given a clean temporary directory
+    When I run "npx bdd-workflow init" in that directory
+    Then the template file ".opencode/templates/proposal.md" contains section "## Acceptance Criteria"

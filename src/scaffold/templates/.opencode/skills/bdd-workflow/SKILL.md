@@ -9,16 +9,15 @@ compatibility: opencode
 
 This project uses the bdd-workflow framework. Every change must follow this sequence:
 
-**explore (optional) → propose → apply → review → amend (optional) → learn (optional) → archive**
+**explore (optional) → propose → apply → review → amend (optional) → [acceptance criteria gate] → archive**
 
-## Three-Layer Model
+## Sub-skills
 
-Every change produces three artifacts:
-- **WHY**: JSDoc comments on every new/modified module and function
-- **WHAT**: Gherkin `.feature` files describing behavior
-- **HOW**: Implementation code
+- **`bdd-workflow-cycle`** — Full cycle detail: three-layer model, propose/apply/check/review/amend
+  sequence, acceptance criteria gate, single-change and parallel roadmap execution, WORKTREE RULE.
+- **`bdd-workflow-roadmap`** — Roadmap YAML schema, CRUD operations, dependency management.
 
-No change is complete unless all three layers are present and consistent.
+Load the relevant sub-skill when you need the detailed instructions for that area.
 
 ## Key Files
 
@@ -35,7 +34,7 @@ No change is complete unless all three layers are present and consistent.
 - **review**: Always after apply — never skip. Review always writes a `*-review.md` file alongside the proposal in `.opencode/proposals/`.
 - **amend**: When review verdict is AMEND. After making fixes, **run `npx bdd-workflow check` and confirm it passes before re-running review.** A failing check after amend means the amend is not complete — do not hand off to review until green.
 - **learn**: When implementation diverged from proposal, or the workflow caused friction
-- **archive**: When review verdict is APPROVE. **STOP after printing the APPROVE verdict and the review file path. Do NOT proceed to archive.** Wait for the user to explicitly say to archive (e.g. "archive", "yes, archive it", "go ahead"). Only then run `/archive --approved`. An APPROVE verdict is permission, not a request.
+- **archive**: When review verdict is APPROVE. **STOP after printing the APPROVE verdict and the review file path.** Run the Acceptance Criteria Gate (see `bdd-workflow-cycle`). Only after explicit user confirmation: run `/archive --approved`. An APPROVE verdict is permission, not a request.
 
 ## Model Guidance
 

@@ -57,3 +57,24 @@ Feature: bdd-workflow update command
     When I run "bdd-workflow update"
     Then the command exits with a non-zero status
     And the output includes "not an initialized bdd-workflow project"
+
+  Scenario: Update prunes an unmodified framework file that no longer exists in templates
+    Given the file ".opencode/agents/old-agent.md" was written by the framework and is unmodified
+    And that file no longer exists in the current template set
+    When I run "bdd-workflow update"
+    Then the file ".opencode/agents/old-agent.md" no longer exists on disk
+    And the output reports "1 pruned"
+
+  Scenario: Update does not prune a framework file that the user has modified
+    Given the file ".opencode/agents/old-agent.md" was written by the framework but modified by the user
+    And that file no longer exists in the current template set
+    When I run "bdd-workflow update"
+    Then the file ".opencode/agents/old-agent.md" still exists on disk
+    And the output reports "1 modified by user (skipped)"
+
+  Scenario: Update force-prunes a user-modified stale framework file when --force is given
+    Given the file ".opencode/agents/old-agent.md" was written by the framework but modified by the user
+    And that file no longer exists in the current template set
+    When I run "bdd-workflow update --force"
+    Then the file ".opencode/agents/old-agent.md" no longer exists on disk
+    And the output reports "1 pruned"

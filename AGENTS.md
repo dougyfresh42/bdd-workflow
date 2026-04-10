@@ -21,3 +21,11 @@ The build step is required because `bdd-workflow update` reads compiled template
 
 `bdd-workflow update` performs a three-way diff and safely overwrites unmodified live
 files while preserving any local customisations.
+
+## Markdown testing criteria
+
+In general BDD tests which are "markdown file contains <specific word>" are  pretty
+useless.  Of course there's then no way to verify agent performance - but that's ok.
+We can add that in the future (though it'll be expensive).  For now it's enough to
+"file exists and is not empty" (not necessarily for every file).  Markdown files are
+constantly changing and we don't need to change words in tests for that it's silly.

@@ -2,15 +2,14 @@
  * @module roadmap/worktree
  * @description Creates and manages git worktrees for roadmap step execution.
  * Provides `createStepWorktree` which creates a git worktree at
- * `.worktrees/<step-id>`, checks out a `roadmap/<step-id>` branch, and copies
- * the step's linked proposal file from `.opencode/proposals/` into the
- * worktree's `.opencode/proposals/` directory. Returns the absolute path to
- * the worktree so the caller (CLI or agent) can hand off to a sub-agent.
+ * `worktrees/<step-id>/` (visible, gitignored directory at project root),
+ * checks out a `roadmap/<step-id>` branch, and copies the step's linked
+ * proposal file from `.opencode/proposals/` into the worktree's
+ * `.opencode/proposals/` directory. Returns the absolute path to the
+ * worktree so the caller can hand off to a sub-agent.
  *
- * Does NOT run the BDD workflow (propose/apply/review) — that is the
- * responsibility of the sub-agent dispatched by the roadmap-runner.
- * Does NOT modify the roadmap YAML — the caller is responsible for updating
- * step status after worktree operations complete.
+ * Does NOT run the BDD workflow — that is the sub-agent's responsibility.
+ * Does NOT modify the roadmap YAML — the caller updates step status.
  */
 
 import { execSync } from 'node:child_process';
@@ -32,9 +31,9 @@ export interface WorktreeResult {
  * 1. Reads the roadmap, finds the step by ID. Throws if step not found.
  * 2. Checks that the step has a `proposal` field. Throws "no proposal linked to step <id>" if not.
  * 3. Checks that the proposal file exists at `.opencode/proposals/<proposal>`. Throws if not.
- * 4. Creates `.worktrees/` directory if it does not exist.
- * 5. Runs `git worktree add .worktrees/<step-id> -b roadmap/<step-id>`.
- * 6. Copies `.opencode/proposals/<proposal>` into `.worktrees/<step-id>/.opencode/proposals/`.
+ * 4. Creates `worktrees/` directory if it does not exist.
+ * 5. Runs `git worktree add worktrees/<step-id> -b roadmap/<step-id>`.
+ * 6. Copies `.opencode/proposals/<proposal>` into `worktrees/<step-id>/.opencode/proposals/`.
  * 7. Returns the WorktreeResult with absolute paths.
  *
  * Note: The worktree is a git checkout and will NOT have `node_modules/` unless
@@ -74,7 +73,7 @@ export function createStepWorktree(
     );
   }
 
-  const worktreeDir = join(process.cwd(), '.worktrees');
+  const worktreeDir = join(process.cwd(), 'worktrees');
   if (!existsSync(worktreeDir)) {
     mkdirSync(worktreeDir, { recursive: true });
   }
@@ -109,7 +108,7 @@ export function createStepWorktree(
  * @param stepId - The ID of the roadmap step whose worktree should be removed
  */
 export function removeStepWorktree(stepId: string): void {
-  const worktreePath = join(process.cwd(), '.worktrees', stepId);
+  const worktreePath = join(process.cwd(), 'worktrees', stepId);
   const branchName = `roadmap/${stepId}`;
 
   try {
