@@ -1,7 +1,7 @@
 ---
 title: "consolidate agents, add acceptance criteria, prune update, worktrees/ dir"
 date: 2026-04-10
-status: draft
+status: completed
 ---
 
 ## Summary
@@ -471,3 +471,8 @@ they assert on section headings — so no test breakage expected.
 
 These commands are not modified. They remain one-shot and workflow-unaware. The merged
 agent explicitly lists them in its "What I do NOT do" section to make the boundary clear.
+
+## Outcome
+- Archived: 2026-04-10
+- Verdict: APPROVE
+- Commit: 92d3187
